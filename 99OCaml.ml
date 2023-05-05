@@ -137,3 +137,52 @@ let decode lst =
     | (Many (count, h))::t -> decode_inner t (many acc count h)
   in
   decode_inner (reverse lst) []
+
+(*Problem 13*)
+(*Duplicate elements of a list*)
+let duplicate lst =
+  let rec duplicate_inner lst accum =
+    match lst with
+    | [] -> accum
+    | h::t -> duplicate_inner t (h::(h::accum))
+  in
+  reverse @@ duplicate_inner lst []
+
+(*Problem 14*)
+(*Replicate the Elements of a List a 
+ Given Number of times*)
+let replicate lst n =
+  let rec copier n accum elem =
+    if n < 1 then accum
+    else copier (n-1) (elem::accum) elem in
+  let rec replicate_inner lst accum =
+    match lst with
+    | [] -> accum
+    | h::t -> replicate_inner t (copier n accum h)
+  in
+  reverse @@ replicate_inner lst []
+    
+(*Problem 15*)
+(*Drop every N'th element of a list*)
+let drop lst n =
+  let rec dropper i lst =
+    match lst with
+    | [] -> []
+    | h::t ->
+        if n = i then dropper 1 t
+        else h :: dropper (i+1) t
+  in
+  dropper 1 lst
+
+(*Problem 16*)
+(*Split a list into two parts; the length of the first
+ part is given*)
+let split lst n =
+  let rec slice_inner lst n accum =
+    match lst with
+    | [] -> (reverse accum, lst)
+    | h::t ->
+        if n = 0 then (reverse accum, lst)
+        else slice_inner t (n-1) (h::accum)
+  in
+  slice_inner lst n []
