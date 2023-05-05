@@ -78,4 +78,62 @@ let compress lst =
   in
   reverse @@ compress_inner lst []
 
+(*Problem 9*)
+(*Pack Consecutive Duplicates*)
+let pack lst =
+  let rec packer lst acc1 acc2 =
+    match lst with
+    | [] -> []
+    | [x] -> (x::acc1)::acc2
+    | h::(m::_ as t) ->
+        if h = m then packer t (h::acc1) acc2
+        else packer t [] ((h::acc1)::acc2)
+  in
+  reverse @@ packer lst [] []
 
+(*Problem 10*)
+(*Run-Length Encoding*)
+let encode lst =
+  let rec encode_inner lst acc count =
+    match lst with
+    | [] -> []
+    | [x] -> (count+1, x) :: acc
+    | h::(m::_ as t) ->
+        if h = m then encode_inner t acc (count+1)
+        else encode_inner t ((count+1, h)::acc) 0
+  in
+  reverse @@ encode_inner lst [] 0
+
+(*Problem 11*)
+(*Modified Run-Length Encoding*)
+type 'a rle =
+  | One of 'a
+  | Many of int * 'a
+
+let mencode (lst: 'a list) =
+  let record count elem =
+    if count = 1 then One elem
+    else Many (count, elem) in
+  let rec mencode_inner lst acc count =
+    match lst with
+    | [] -> []
+    | [x] -> (record (count+1) x) :: acc
+    | h::(m::_ as t) ->
+        if h = m then mencode_inner t acc (count+1)
+        else mencode_inner t ((record (count+1) h) :: acc) 0
+  in
+  reverse @@ mencode_inner lst [] 0
+
+(*Problem 12*)
+(*Decode a Run-Length Encoding*)
+let decode lst =
+  let rec many acc count elem =
+    if count = 0 then acc
+    else  many (elem :: acc) (count-1) elem in
+  let rec decode_inner lst acc =
+    match lst with
+    | [] -> acc
+    | (One h)::t -> decode_inner t (h::acc)
+    | (Many (count, h))::t -> decode_inner t (many acc count h)
+  in
+  decode_inner (reverse lst) []
