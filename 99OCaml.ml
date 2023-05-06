@@ -178,11 +178,37 @@ let drop lst n =
 (*Split a list into two parts; the length of the first
  part is given*)
 let split lst n =
-  let rec slice_inner lst n accum =
+  let rec split_inner lst n accum =
     match lst with
     | [] -> (reverse accum, lst)
     | h::t ->
         if n = 0 then (reverse accum, lst)
-        else slice_inner t (n-1) (h::accum)
+        else split_inner t (n-1) (h::accum)
   in
-  slice_inner lst n []
+  split_inner lst n []
+
+(*Problem 17*)
+(*Extract a slice from a list*)
+let slice lst i k =
+  let rec slicer lst j accum =
+    match lst with
+    | [] -> accum
+    | _ when j > k -> accum
+    | h::t ->
+        if (j >= i && j <= k) then slicer t (j+1) (h::accum)
+        else slicer t (j+1) (accum)
+  in
+  reverse @@ slicer lst 0 []
+
+(*Problem 18*)
+(*Rotate a list N places to the left*)
+let rotate lst n =
+  let nlst = (length lst) in
+  let rec rotate_inner lst n accum =
+    match lst with
+    | [] -> accum
+    | h::t ->
+        if n = 0 then lst @ (reverse accum)
+        else rotate_inner t (n-1) (h::accum)
+  in
+  rotate_inner lst (n mod nlst) []
