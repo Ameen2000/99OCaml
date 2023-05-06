@@ -212,3 +212,27 @@ let rotate lst n =
         else rotate_inner t (n-1) (h::accum)
   in
   rotate_inner lst (n mod nlst) []
+
+(*Problem 19*)
+(*Remove the Kth Element from a list*)
+let remove_at k lst =
+  let rec remove_at_inner i lst accum =
+    match lst with
+    | [] -> reverse accum
+    | h::t ->
+        if i = k then (reverse accum) @ t
+        else remove_at_inner (i+1) t (h::accum)
+  in
+  remove_at_inner 0 lst []
+
+(*Problem 20*)
+(*Insert an Element at a Given Position Into a List*)
+let insert_at elem k lst =
+  let rec insert_at_inner elem i lst accum =
+    match lst with
+    | [] -> reverse (elem::accum)
+    | h::t ->
+        if i = k then (reverse accum) @ (elem::h::t)
+        else insert_at_inner elem (i+1) t (h::accum)
+  in
+  insert_at_inner elem 0 lst []
