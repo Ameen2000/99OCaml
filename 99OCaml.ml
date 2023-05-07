@@ -20,9 +20,10 @@ let rec last_two lst =
 (*Nth element of a list*)
 let rec nth lst n =
   match lst with
-  | h::_ when n = 1 -> Some h
-  | _ ::t when n > 1 -> nth t (n-1)
-  | _ -> None
+  | [] -> None
+  | h::t -> 
+      if n = 0 then Some h
+      else nth t (n-1)
 
 (*Problem 4*)
 (*Length of a list*)
@@ -236,3 +237,45 @@ let insert_at elem k lst =
         else insert_at_inner elem (i+1) t (h::accum)
   in
   insert_at_inner elem 0 lst []
+
+(*Problem 21*)
+(*Create a list Containing All Integers Within a Given Range*)
+let range a b =
+  let rec range_inner a b accum =
+    match (a < b) with
+    | false ->
+        if a = b then b::accum
+        else range_inner (a-1) b (a::accum)
+    | true -> range_inner (a+1) b (a::accum)
+  in
+  reverse @@ range_inner a b []
+
+(*Problem 22*)
+(*Extract a Given Number of Randomly Selected Elements
+ from a List*)
+
+(*The refine function is just a helper
+ function to get a list that who's elements
+ are not Option types, so it will match the example
+ given in the problem*)
+let refine lst =
+  let rec refine_inner lst accum =
+    match lst with
+    | [] -> accum
+    | None::t -> refine_inner t accum
+    | Some h::t -> refine_inner t (h::accum)
+  in
+  refine_inner lst []
+
+let rand_select lst n =
+  let rec rand_select_inner lst n accum =
+    let nlst = length lst in
+    let selection =
+      if nlst > 0 then Random.int nlst
+      else 0 in
+    match n, lst with
+    | _, [] -> accum
+    | 0, _ -> accum
+    | _ -> rand_select_inner (remove_at selection lst) (n-1) ((nth lst @@ selection) :: accum)
+  in
+  refine @@ rand_select_inner lst n []
