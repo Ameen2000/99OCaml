@@ -257,19 +257,7 @@ let range a b =
 (*Problem 23*)
 (*Extract a Given Number of Randomly Selected Elements
  from a List*)
-
-(*The refine function is just a helper
- function to get a list that who's elements
- are not Option types, so it will match the example
- given in the problem*)
-let refine lst =
-  let rec refine_inner lst accum =
-    match lst with
-    | [] -> accum
-    | None::t -> refine_inner t accum
-    | Some h::t -> refine_inner t (h::accum)
-  in
-  refine_inner lst []
+exception Nonsense of string
 
 let rand_select lst n =
   let rec rand_select_inner lst n accum =
@@ -281,8 +269,9 @@ let rand_select lst n =
     | _, [] -> accum
     | 0, _ -> accum
     | _ -> rand_select_inner (remove_at selection lst) (n-1) ((nth lst @@ selection) :: accum)
-  in
-  refine @@ rand_select_inner lst n []
+  in 
+  if n < 0 then raise (Nonsense "Impossible try again")
+  else List.filter_map (fun x -> x) @@ rand_select_inner lst n []
 
 (*Problem 24*)
 (*Lotto: Draw N Different Random Numbers From the
@@ -306,3 +295,17 @@ let rec combos k lst =
       let fix_h = List.map (fun x -> h::x) (combos (k-1) t) in
       let pivot = combos k t in
       fix_h @ pivot
+
+(*Problem 27*)
+(*Group the Elements of a Set into Disjoint Subsets*)
+(*Not answered yet*)
+
+(*Problem 28*)
+(*Sorting a List of Lists According to Length of Sublists*)
+(*Part 1*)
+let length_sort lst =
+  let lengths = List.map length lst in
+  let pairing = List.combine lst lengths in
+  let comparer (x1, y1) (x2, y2) = compare y1 y2 in
+  let sorted = List.sort comparer pairing in
+  List.map fst sorted
