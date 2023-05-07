@@ -126,6 +126,10 @@ let mencode (lst: 'a list) =
   reverse @@ mencode_inner lst [] 0
 
 (*Problem 12*)
+(*Modified Run-Lenght Encoding*)
+(*Don't understand what exactly is required.*)
+
+(*Problem 13*)
 (*Decode a Run-Length Encoding*)
 let decode lst =
   let rec many acc count elem =
@@ -139,7 +143,7 @@ let decode lst =
   in
   decode_inner (reverse lst) []
 
-(*Problem 13*)
+(*Problem 14*)
 (*Duplicate elements of a list*)
 let duplicate lst =
   let rec duplicate_inner lst accum =
@@ -149,7 +153,7 @@ let duplicate lst =
   in
   reverse @@ duplicate_inner lst []
 
-(*Problem 14*)
+(*Problem 15*)
 (*Replicate the Elements of a List a 
  Given Number of times*)
 let replicate lst n =
@@ -163,7 +167,7 @@ let replicate lst n =
   in
   reverse @@ replicate_inner lst []
     
-(*Problem 15*)
+(*Problem 16*)
 (*Drop every N'th element of a list*)
 let drop lst n =
   let rec dropper i lst =
@@ -175,7 +179,7 @@ let drop lst n =
   in
   dropper 1 lst
 
-(*Problem 16*)
+(*Problem 17*)
 (*Split a list into two parts; the length of the first
  part is given*)
 let split lst n =
@@ -188,7 +192,7 @@ let split lst n =
   in
   split_inner lst n []
 
-(*Problem 17*)
+(*Problem 18*)
 (*Extract a slice from a list*)
 let slice lst i k =
   let rec slicer lst j accum =
@@ -201,7 +205,7 @@ let slice lst i k =
   in
   reverse @@ slicer lst 0 []
 
-(*Problem 18*)
+(*Problem 19*)
 (*Rotate a list N places to the left*)
 let rotate lst n =
   let nlst = (length lst) in
@@ -214,7 +218,7 @@ let rotate lst n =
   in
   rotate_inner lst (n mod nlst) []
 
-(*Problem 19*)
+(*Problem 20*)
 (*Remove the Kth Element from a list*)
 let remove_at k lst =
   let rec remove_at_inner i lst accum =
@@ -226,7 +230,7 @@ let remove_at k lst =
   in
   remove_at_inner 0 lst []
 
-(*Problem 20*)
+(*Problem 21*)
 (*Insert an Element at a Given Position Into a List*)
 let insert_at elem k lst =
   let rec insert_at_inner elem i lst accum =
@@ -238,7 +242,7 @@ let insert_at elem k lst =
   in
   insert_at_inner elem 0 lst []
 
-(*Problem 21*)
+(*Problem 22*)
 (*Create a list Containing All Integers Within a Given Range*)
 let range a b =
   let rec range_inner a b accum =
@@ -250,7 +254,7 @@ let range a b =
   in
   reverse @@ range_inner a b []
 
-(*Problem 22*)
+(*Problem 23*)
 (*Extract a Given Number of Randomly Selected Elements
  from a List*)
 
@@ -279,3 +283,26 @@ let rand_select lst n =
     | _ -> rand_select_inner (remove_at selection lst) (n-1) ((nth lst @@ selection) :: accum)
   in
   refine @@ rand_select_inner lst n []
+
+(*Problem 24*)
+(*Lotto: Draw N Different Random Numbers From the
+ Set 1..M*)
+let lotto_select n bound =
+  rand_select (range 1 bound) n
+
+(*Problem 25*)
+(*Generate a random permutation of the elements of a list*)
+let permutation lst =
+  rand_select lst (length lst)
+
+(*Problem 26*)
+(*Generate the Combinations of K Distinct Objects Chosen
+ From the N Elements of a List*)
+let rec combos k lst =
+  if k <= 0 then [[]]
+  else match lst with
+  | [] -> []
+  | h::t ->
+      let fix_h = List.map (fun x -> h::x) (combos (k-1) t) in
+      let pivot = combos k t in
+      fix_h @ pivot
