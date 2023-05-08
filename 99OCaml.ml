@@ -126,7 +126,7 @@ let mencode (lst: 'a list) =
   reverse @@ mencode_inner lst [] 0
 
 (*Problem 12*)
-(*Modified Run-Lenght Encoding*)
+(*Run-Lenght Encoding Direct Solution*)
 (*Don't understand what exactly is required.*)
 
 (*Problem 13*)
