@@ -309,3 +309,49 @@ let length_sort lst =
   let comparer (x1, y1) (x2, y2) = compare y1 y2 in
   let sorted = List.sort comparer pairing in
   List.map fst sorted
+
+(*Part 2*)
+let frequency_sort lst =
+  let lengths = List.map length lst in
+  let rec frequencies n lst elem =
+    match lst with
+    | [] -> n
+    | h::t ->
+        if elem = h then frequencies (n+1) t elem
+        else frequencies n t elem
+  in
+  let frequencies_lst = List.map (frequencies 0 lengths) lengths in
+  let pairing = List.combine lst frequencies_lst in
+  let comparer (x1, y1) (x2, y2) = compare y1 y2 in
+  let sorted = List.sort comparer pairing in
+  List.map fst sorted
+
+(*Problem 29*)
+(*Determine whether a given integer is prime*)
+let is_prime n =
+  let rec fPrime_inner n start =
+    match (n > start*start, n mod start) with
+      | (false, 0) -> false
+      | (false, _) -> true
+      | (_, 0) -> false
+      | (_, _) -> fPrime_inner n (start+1)
+  in
+  let fPrime n = fPrime_inner n 2
+  in
+  n = 2 || (n > 2) && (n mod 2 = 1) && fPrime n
+
+(*Problem 30*)
+(*Determine the greatest common divisor of two positive integer numbers*)
+let rec gcd a b =
+  if b = 0 then a else gcd b (a mod b)
+
+(*Problem 31*)
+(*Determine whether two positive Integer number are coprime*)
+let coprime a b =
+  if (gcd a b) = 1 then true else false
+
+(*Problem 32*)
+(*Calculate Euler's Totient function phi(m)*)
+let phi m =
+  let lst = range 1 (m-1) in
+  length @@ List.filter (coprime m) lst
