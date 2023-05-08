@@ -127,7 +127,7 @@ let mencode (lst: 'a list) =
 
 (*Problem 12*)
 (*Run-Lenght Encoding Direct Solution*)
-(*Don't understand what exactly is required.*)
+(*Already solved directly in problem 11*)
 
 (*Problem 13*)
 (*Decode a Run-Length Encoding*)
