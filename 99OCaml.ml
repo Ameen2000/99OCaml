@@ -355,3 +355,53 @@ let coprime a b =
 let phi m =
   let lst = range 1 (m-1) in
   length @@ List.filter (coprime m) lst
+
+(*Problem 33*)
+(*Determine the Prime Factors of a Given Positive Integer*)
+let pfactors n =
+  let rec pfactors_inner divisor accum n =
+    if n = 1 then accum
+    else 
+      if n mod divisor = 0
+      then pfactors_inner divisor (divisor::accum) (n / divisor)
+      else pfactors_inner (divisor+1) accum n
+  in
+  pfactors_inner 2 [] n
+
+(*Problem 34*)
+let pmfactors n =
+  let rec pmfactors_inner divisor accum n =
+    if n = 1 then accum
+    else
+      if n mod divisor = 0
+      then 
+        match pmfactors_inner divisor accum (n / divisor) with
+        | (p, m)::t when p = divisor -> (p, m+1)::t
+        | lst -> (divisor, 1)::lst
+      else pmfactors_inner (divisor+1) accum n
+  in
+  pmfactors_inner 2 [] n
+
+(*Problem 35*)
+(*Improve Euler's Totient function*)
+let pow n e =
+  let rec pow_inner n e accum =
+    if e < 1 then accum
+    else pow_inner n (e-1) (n*accum)
+  in
+  pow_inner n e 1
+
+let phi_improved n =
+  let terms init (p, m) =
+    init*(p-1)*(pow p (m-1))
+  in
+  List.fold_left terms 1 (pmfactors n)
+
+(*Problem 36*)
+(*Time both versions of the Totient function*)
+let timeit f x =
+  let start = Unix.gettimeofday () in
+  let result = f x in
+  let stop = Unix.gettimeofday () in
+  Printf.printf "Time: %fs\n" (stop -. start);
+  Printf.printf "Result: %d\n" result
