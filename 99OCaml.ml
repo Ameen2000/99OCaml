@@ -405,3 +405,8 @@ let timeit f x =
   let stop = Unix.gettimeofday () in
   Printf.printf "Time: %fs\n" (stop -. start);
   Printf.printf "Result: %d\n" result
+
+(*Problem 37*)
+(*A List of Prime Numbers*)
+let all_primes a b =
+  List.filter is_prime (range a b)
