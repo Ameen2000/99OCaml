@@ -410,3 +410,21 @@ let timeit f x =
 (*A List of Prime Numbers*)
 let all_primes a b =
   List.filter is_prime (range a b)
+
+(*Problem 38*)
+(*Goldbach's Conjecture*)
+let goldbach n =
+  let rec goldbach_inner a b =
+    if (is_prime a && is_prime b) && a <= b
+    then (a, b)
+    else goldbach_inner (a+1) (b-1)
+  in
+  goldbach_inner 3 (n-3)
+
+(*Problem 39*)
+(*A List of Goldbach Compositions*)
+let goldbach_lst a b =
+  let evens = List.filter (fun x -> x mod 2 = 0) (range a b) in
+  let goldbach_compositions = List.map goldbach evens in
+  List.combine evens goldbach_compositions
+
