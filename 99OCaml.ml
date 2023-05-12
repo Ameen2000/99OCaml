@@ -417,7 +417,7 @@ let goldbach n =
   let rec goldbach_inner a b =
     if (is_prime a && is_prime b) && a <= b
     then (a, b)
-    else goldbach_inner (a+1) (b-1)
+    else goldbach_inner (a+2) (b-2)
   in
   goldbach_inner 3 (n-3)
 
@@ -427,4 +427,11 @@ let goldbach_lst a b =
   let evens = List.filter (fun x -> x mod 2 = 0) (range a b) in
   let goldbach_compositions = List.map goldbach evens in
   List.combine evens goldbach_compositions
+
+(*Very rarely, the primes are both bigger than say 50. 
+Try to find out how many such cases there are in the range 2..3000.*)
+let goldbach_bound a b lim =
+  let checker (x, (y,z)) = y > lim && z > lim in
+  let goldbach_compositions = goldbach_lst (2*lim+2) b in
+  List.filter checker goldbach_compositions
 
