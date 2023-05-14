@@ -466,3 +466,22 @@ let table2 var1 var2 expr =
    (true, false, eval var1 true var2 false expr);
     (false, true, eval var1 false var2 true expr);
   (false, false, eval var1 false var2 false expr)]
+
+(*Problem 41*)
+(*Truth tables continued*)
+let rec eval_map vals expr =
+  match expr with
+  | Var x -> List.assoc x vals
+  | Not e -> not (eval_map vals e)
+  | And (e1, e2) -> (eval_map vals e1) && (eval_map vals e2)
+  | Or (e1, e2) -> (eval_map vals e1) || (eval_map vals e2)
+
+let table vars expr =
+  let rec table_inner vals vars expr =
+  match vars with
+  | [] -> [(List.rev vals, eval_map vals expr)]
+  | h::t ->
+      table_inner ((h, true)::vals) t expr
+    @ table_inner ((h, false)::vals) t expr
+  in
+  table_inner [] vars expr
