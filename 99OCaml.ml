@@ -414,17 +414,23 @@ let all_primes a b =
 (*Problem 38*)
 (*Goldbach's Conjecture*)
 let goldbach n =
+  if n = 2 || (n mod 2 = 1)
+  then (1, n-1)
+  else
   let rec goldbach_inner a b =
-    if (is_prime a && is_prime b) && a <= b
-    then (a, b)
-    else goldbach_inner (a+2) (b-2)
+  match (a < b) with
+  | false -> (a,b)
+  | true ->
+          if is_prime a && is_prime b
+          then (a, b)
+          else goldbach_inner (a+1) (b-1)
   in
   goldbach_inner 3 (n-3)
 
 (*Problem 39*)
 (*A List of Goldbach Compositions*)
 let goldbach_lst a b =
-  let evens = List.filter (fun x -> x mod 2 = 0) (range a b) in
+  let evens = List.filter (fun x -> x mod 2 = 0 && x > 2) (range a b) in
   let goldbach_compositions = List.map goldbach evens in
   List.combine evens goldbach_compositions
 
