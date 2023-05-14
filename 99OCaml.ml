@@ -435,3 +435,28 @@ let goldbach_bound a b lim =
   let goldbach_compositions = goldbach_lst (2*lim+2) b in
   List.filter checker goldbach_compositions
 
+(*Problem 40*)
+(*Truth Tables for Logical Expressions (2 Variables)*)
+type bool_expr =
+  | Var of string
+  | Not of bool_expr
+  | And of bool_expr*bool_expr
+  | Or of bool_expr*bool_expr
+
+exception LogicalError of string
+
+let rec eval var1 val1 var2 val2 expr =
+  match expr with
+  | Var x ->
+    if x = var1 then val1
+    else if x = var2 then val2
+    else raise (LogicalError "Variable not in expression")
+  | Not e -> not (eval var1 val1 var2 val2 expr)
+  | And (e1, e2) -> (eval var1 val1 var2 val2 e1) && (eval var1 val1 var2 val2 e2)
+  | Or (e1, e2) -> (eval var1 val1 var2 val2 e1) || (eval var1 val1 var2 val2 e2)
+
+let table2 var1 var2 expr =
+  [(true, true, eval var1 true var2 true expr);
+   (true, false, eval var1 true var2 false expr);
+    (false, true, eval var1 false var2 true expr);
+  (false, false, eval var1 false var2 false expr)]
