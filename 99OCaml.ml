@@ -485,3 +485,17 @@ let table vars expr =
     @ table_inner ((h, false)::vals) t expr
   in
   table_inner [] vars expr
+
+(*Problem 42*)
+(*Gray Codes*)
+let gray n =
+  let start = ["0"; "1"] in
+  let rec gray_inner n accum =
+    let join x y = x^y in
+    let l1 = List.map (join "0") accum in
+    let l2 = List.rev @@ List.map (join "1") accum in
+    match n with
+    | 1 -> accum
+    | n -> gray_inner (n-1) (l1@l2)
+  in
+  gray_inner n start
