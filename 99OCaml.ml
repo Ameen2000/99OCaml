@@ -499,3 +499,15 @@ let gray n =
     | n -> gray_inner (n-1) (l1@l2)
   in
   gray_inner n start
+
+(*Problem 43*)
+(*Count the Leaves of the Binary Tree*)
+type 'a tree =
+  | Leaf
+  | Node of 'a * 'a tree * 'a tree
+
+let rec count_leaves tr =
+  match tr with
+  | Leaf -> 0
+  | Node (_, Leaf, Leaf) -> 1
+  | Node (_, l, r) -> count_leaves l + count_leaves r
