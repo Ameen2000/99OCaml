@@ -501,6 +501,10 @@ let gray n =
   gray_inner n start
 
 (*Problem 43*)
+(*Huffman Codes*)
+(*No solution yet*)
+
+(*Problem 44*)
 (*Count the Leaves of the Binary Tree*)
 type 'a tree =
   | Leaf
@@ -511,3 +515,15 @@ let rec count_leaves tr =
   | Leaf -> 0
   | Node (_, Leaf, Leaf) -> 1
   | Node (_, l, r) -> count_leaves l + count_leaves r
+
+(*Problem 45*)
+(*Collect the Leaves of a
+ Binary Tree in a list*)
+let leaves tr =
+  let rec collector tr accum =
+    match tr with
+    | Leaf -> accum
+    | Node (x, Leaf, Leaf) -> x::accum
+    | Node (_, l, r) -> (collector l (collector r accum))
+  in
+  collector tr []
