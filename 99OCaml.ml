@@ -527,3 +527,29 @@ let leaves tr =
     | Node (_, l, r) -> (collector l (collector r accum))
   in
   collector tr []
+
+(*Problem 46*)
+(*Collect the Internal Nodes of
+ a Binary Tree in a list*)
+let internals tr =
+  let rec collector tr accum =
+    match tr with
+    | Leaf -> accum
+    | Node (x, Leaf, Leaf) -> accum
+    | Node (x, l, r) -> (collector l (collector r (x::accum)))
+  in
+  List.rev @@ collector tr []
+
+(*Problem 47*)
+(*Collect the Nodes at a given level*)
+let at_level tr i =
+  let rec collector tr accum k =
+    match tr with
+    | Leaf -> accum
+    | Node (x, l, r) ->
+        if i = k then
+          x::accum
+        else
+          collector l (collector r accum (k+1)) (k+1)
+  in
+  collector tr [] 1
