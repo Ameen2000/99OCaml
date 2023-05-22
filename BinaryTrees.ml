@@ -6,6 +6,11 @@ type 'a tree =
 let singleton x =
   Node (x, Leaf, Leaf)
 
+let tree_head tr =
+  match tr with
+  | Leaf -> raise (Invalid_argument "It's empty")
+  | Node(x, _, _) -> x
+
 let rec tree_insert x tr =
   match tr with
   | Leaf -> singleton x
@@ -63,24 +68,3 @@ let at_level tr i =
 
 (*Problem 48*)
 (*Construct a complete binary tree*)
-let complete_binary_tree lst =
-  let rec ctree_insert elem tr =
-    match tr with
-    | Leaf -> Node (elem, Leaf, Leaf)
-    | Node (x, Leaf, Leaf) ->
-        Node (x, Node (elem, Leaf, Leaf), Leaf)
-    | Node (x, y, Leaf) ->
-        Node (x, y, Node (elem, Leaf, Leaf))
-    | Node (x, y, z) ->
-        Node (x, ctree_insert elem y, z)
-  in
-  let rec tree_make lst tr_accum =
-    match lst with
-    | [] -> tr_accum
-    | [x] -> ctree_insert x tr_accum
-    | [x; y] -> ctree_insert y (ctree_insert x tr_accum)
-    | [x; y; z] ->
-        ctree_insert z (ctree_insert y (ctree_insert x tr_accum))
-    | h::t -> tree_make t (ctree_insert h tr_accum)
-  in
-  tree_make lst Leaf
