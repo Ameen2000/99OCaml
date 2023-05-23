@@ -6,6 +6,11 @@ type 'a tree =
 let singleton x =
   Node (x, Leaf, Leaf)
 
+let tree_head tr =
+  match tr with
+  | Leaf -> raise (Invalid_argument "It's empty")
+  | Node(x, _, _) -> x
+
 let rec tree_insert x tr =
   match tr with
   | Leaf -> singleton x
@@ -63,24 +68,29 @@ let at_level tr i =
 
 (*Problem 48*)
 (*Construct a complete binary tree*)
+let rec split_at lst n acc =
+  match (n , lst) with
+  | (0, _) -> (List.rev acc, lst)
+  | (_, []) -> (List.rev acc, [])
+  | (_, h::t) -> split_at t (n-1) (h::acc)
+
+let rec tree_make vals trees =
+  match (vals, trees) with
+  | (vals, []) ->
+      List.map (fun x -> Node(x, Leaf, Leaf)) vals
+  | (h::t, [x]) -> Node(h, x, Leaf)::(tree_make t [])
+  | (h1::t1, h2::m2::t2) -> Node(h1, h2, m2)::(tree_make t1 t2)
+  | _ -> raise (Invalid_argument "lol")
+
 let complete_binary_tree lst =
-  let rec ctree_insert elem tr =
-    match tr with
-    | Leaf -> Node (elem, Leaf, Leaf)
-    | Node (x, Leaf, Leaf) ->
-        Node (x, Node (elem, Leaf, Leaf), Leaf)
-    | Node (x, y, Leaf) ->
-        Node (x, y, Node (elem, Leaf, Leaf))
-    | Node (x, y, z) ->
-        Node (x, ctree_insert elem y, z)
-  in
-  let rec tree_make lst tr_accum =
-    match lst with
-    | [] -> tr_accum
-    | [x] -> ctree_insert x tr_accum
-    | [x; y] -> ctree_insert y (ctree_insert x tr_accum)
-    | [x; y; z] ->
-        ctree_insert z (ctree_insert y (ctree_insert x tr_accum))
-    | h::t -> tree_make t (ctree_insert h tr_accum)
-  in
-  tree_make lst Leaf
+  match lst with
+  | [] -> Leaf
+  | h::t ->
+      let rec aux n lst =
+        match lst with
+        | [] -> []
+        | lst ->
+            let vals, trees = split_at lst (1 lsl n) [] in
+            tree_make vals (aux (n+1) trees)
+      in
+      List.hd (aux 0 lst)
