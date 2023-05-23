@@ -68,3 +68,29 @@ let at_level tr i =
 
 (*Problem 48*)
 (*Construct a complete binary tree*)
+let rec split_at lst n acc =
+  match (n , lst) with
+  | (0, _) -> (List.rev acc, lst)
+  | (_, []) -> (List.rev acc, [])
+  | (_, h::t) -> split_at t (n-1) (h::acc)
+
+let rec tree_make vals trees =
+  match (vals, trees) with
+  | (vals, []) ->
+      List.map (fun x -> Node(x, Leaf, Leaf)) vals
+  | (h::t, [x]) -> Node(h, x, Leaf)::(tree_make t [])
+  | (h1::t1, h2::m2::t2) -> Node(h1, h2, m2)::(tree_make t1 t2)
+  | _ -> raise (Invalid_argument "lol")
+
+let complete_binary_tree lst =
+  match lst with
+  | [] -> Leaf
+  | h::t ->
+      let rec aux n lst =
+        match lst with
+        | [] -> []
+        | lst ->
+            let vals, trees = split_at lst (1 lsl n) [] in
+            tree_make vals (aux (n+1) trees)
+      in
+      List.hd (aux 0 lst)
