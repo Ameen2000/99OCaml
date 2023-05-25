@@ -8,8 +8,8 @@ let singleton x =
 
 let tree_head tr =
   match tr with
-  | Leaf -> raise (Invalid_argument "It's empty")
-  | Node(x, _, _) -> x
+  | Leaf -> None
+  | Node(x, _, _) -> Some x
 
 let rec tree_insert x tr =
   match tr with
