@@ -299,6 +299,12 @@ let rec combos k lst =
 (*Problem 27*)
 (*Group the Elements of a Set into Disjoint Subsets*)
 (*Not answered yet*)
+(*
+let group lst sizes =
+  let initial = List.map (fun size -> size, []) sizes in
+  let combos2 lst k = combos k lst in
+  let slices = List.map (combos2 lst) sizes in
+ *)
 
 (*Problem 28*)
 (*Sorting a List of Lists According to Length of Sublists*)
