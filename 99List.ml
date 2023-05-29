@@ -299,13 +299,36 @@ let rec combos k lst =
 (*Problem 27*)
 (*Group the Elements of a Set into Disjoint Subsets*)
 (*Not answered yet*)
-(*
-let group lst sizes =
-  let initial = List.map (fun size -> size, []) sizes in
-  let combos2 lst k = combos k lst in
-  let slices = List.map (combos2 lst) sizes in
- *)
+let sum l =
+  List.fold_left (+) 0 l
 
+let partitions size lst =
+  let rec partition accum size lst =
+    match lst with
+    | [] -> []
+    | _ when size = 0 -> []
+    | h::t when size = 1 -> ([h], accum@t)::(partition (h::accum) 1 t)
+    | h::t ->
+        List.map (fun (x,y) -> h::x,y) (partition accum (size-1) t) |>
+        List.append (partition (h::accum) size t)
+  in
+  partition [] size lst
+
+let group lst sizes =
+  if List.length lst < sum sizes 
+  then raise (Invalid_argument "Partition sizes are bigger than the list")
+  else
+    let rec grouper lst sizes =
+      match sizes with
+      | [] -> [[]]
+      | size::tsizes ->
+          partitions size lst |>
+          List.map (fun (partion, rest) -> grouper rest tsizes |>
+          List.map (fun l -> partion::l)) |>
+          List.flatten
+    in
+    grouper lst sizes
+          
 (*Problem 28*)
 (*Sorting a List of Lists According to Length of Sublists*)
 (*Part 1*)
