@@ -86,3 +86,16 @@ let huffman_sort lst =
     | (Node (k1, _, _), Node (k2, _, _)) -> compare k1 k2
   in
   List.sort comparer lst
+
+let huff_prio htree =
+  match htree with
+  | Leaf (_, priority) -> priority
+  | Node (priority, _, _) -> priority
+
+let rec huffman_insert helem hlst =
+  match hlst with
+  | [] -> [helem]
+  | h::t ->
+      if huff_prio h < huff_prio helem
+      then h :: (huffman_insert helem t)
+      else helem :: hlst
