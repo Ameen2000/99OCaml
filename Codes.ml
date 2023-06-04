@@ -101,6 +101,18 @@ module Huffman =
           if prio h < prio helem
           then h :: (insert helem t)
           else helem :: hlst
+
+    let huffman_make lst =
+      let hlst = List.map tuple_to_leaf lst in
+      let sorted = sort hlst in
+      let rec aux lst =
+        match lst with
+        | [elem] -> elem
+        | [x; y] -> node x y
+        | h::m::t -> aux (insert (node h m) t)
+        | _ -> assert false
+      in
+      aux sorted
   end
 
 module type Huffman =
@@ -111,4 +123,24 @@ module type Huffman =
     val sort : huffman_tree list -> huffman_tree list
     val prio : huffman_tree -> int
     val insert : huffman_tree -> huffman_tree list
+    val huffman_make : (string * int) list -> huffman_tree
   end
+
+let binary_traverse elem tr =
+  let open Huffman in
+  let rec aux tr accum =
+    match tr with
+    | Leaf (char, _) -> 
+        if char = elem then accum
+        else ""
+    | Node (prio, left, right) ->
+        aux left (accum ^ "0") ^ aux right (accum ^ "1")
+  in
+  aux tr ""
+
+let huffman lst =
+  let tr = Huffman.huffman_make lst in
+  let chars = List.map fst lst in
+  let traverse_inner a b = binary_traverse b a in
+  let bin = List.map (traverse_inner tr) @@ chars in
+  List.combine chars bin
