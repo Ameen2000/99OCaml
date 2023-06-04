@@ -60,42 +60,55 @@ let gray n =
 (*Problem 43*)
 (*Huffman Codes*)
 (*No solution yet*)
-type huffman_tree =
-  | Leaf of string * int
-  | Node of int * huffman_tree * huffman_tree
+module Huffman =
+  struct
+    type huffman_tree =
+      | Leaf of string * int
+      | Node of int * huffman_tree * huffman_tree
 
-let tuple_to_leaf (ch1, n1) =
-  Leaf (ch1, n1)
+    let tuple_to_leaf (ch1, n1) =
+      Leaf (ch1, n1)
 
-let huffman_node x y = 
-  match (x, y) with
-  | (Leaf (_, n1), Leaf (_, n2)) -> Node (n1+n2, x, y)
-  | (Leaf (ch1, n1), Node (k, left, right)) ->
-      Node (k + n1, Leaf (ch1, n1), Node (k, left, right))
-  | (Node (k, left, right), Leaf (ch1, n1)) ->
-      Node (k + n1, Node (k, left, right), Leaf (ch1, n1))
-  | (Node (k1, left1, right1), Node (k2, left2, right2)) ->
-      Node (k1 + k2, Node (k1, left1, right1), Node (k2, left2, right2))
+    let node x y = 
+      match (x, y) with
+      | (Leaf (_, n1), Leaf (_, n2)) -> Node (n1+n2, x, y)
+      | (Leaf (ch1, n1), Node (k, left, right)) ->
+          Node (k + n1, Leaf (ch1, n1), Node (k, left, right))
+      | (Node (k, left, right), Leaf (ch1, n1)) ->
+          Node (k + n1, Node (k, left, right), Leaf (ch1, n1))
+      | (Node (k1, left1, right1), Node (k2, left2, right2)) ->
+          Node (k1 + k2, Node (k1, left1, right1), Node (k2, left2, right2))
 
-let huffman_sort lst =
-  let comparer x y =
-    match (x, y) with
-    | (Leaf (_, n1), Leaf (_, n2)) -> compare n1 n2
-    | (Node (k, _, _), Leaf (_, n1)) -> compare k n1
-    | (Leaf (_, n1), Node (k, _, _)) -> compare k n1
-    | (Node (k1, _, _), Node (k2, _, _)) -> compare k1 k2
-  in
-  List.sort comparer lst
+    let sort lst =
+      let comparer x y =
+        match (x, y) with
+        | (Leaf (_, n1), Leaf (_, n2)) -> compare n1 n2
+        | (Node (k, _, _), Leaf (_, n1)) -> compare k n1
+        | (Leaf (_, n1), Node (k, _, _)) -> compare k n1
+        | (Node (k1, _, _), Node (k2, _, _)) -> compare k1 k2
+    in
+    List.sort comparer lst
 
-let huff_prio htree =
-  match htree with
-  | Leaf (_, priority) -> priority
-  | Node (priority, _, _) -> priority
+    let prio htree =
+      match htree with
+      | Leaf (_, priority) -> priority
+      | Node (priority, _, _) -> priority
 
-let rec huffman_insert helem hlst =
-  match hlst with
-  | [] -> [helem]
-  | h::t ->
-      if huff_prio h < huff_prio helem
-      then h :: (huffman_insert helem t)
-      else helem :: hlst
+    let rec insert helem hlst =
+      match hlst with
+      | [] -> [helem]
+      | h::t ->
+          if prio h < prio helem
+          then h :: (insert helem t)
+          else helem :: hlst
+  end
+
+module type Huffman =
+  sig
+    type huffman_tree
+    val tuple_to_leaf : string * int -> huffman_tree
+    val node : huffman_tree -> huffman_tree -> huffman_tree
+    val sort : huffman_tree list -> huffman_tree list
+    val prio : huffman_tree -> int
+    val insert : huffman_tree -> huffman_tree list
+  end
