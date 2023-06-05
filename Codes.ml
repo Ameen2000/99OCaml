@@ -110,7 +110,7 @@ module Huffman =
         | [elem] -> elem
         | [x; y] -> node x y
         | h::m::t -> aux (insert (node h m) t)
-        | _ -> assert false
+        | [] -> raise (Invalid_argument "empty list")
       in
       aux sorted
   end
