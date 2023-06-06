@@ -126,7 +126,7 @@ module type Huffman =
     val huffman_make : (string * int) list -> huffman_tree
   end
 
-let binary_traverse elem tr =
+let binary_traverse elem ~tr =
   let open Huffman in
   let rec aux tr accum =
     match tr with
@@ -141,6 +141,5 @@ let binary_traverse elem tr =
 let huffman lst =
   let tr = Huffman.huffman_make lst in
   let chars = List.map fst lst in
-  let traverse_inner a b = binary_traverse b a in
-  let bin = List.map (traverse_inner tr) @@ chars in
+  let bin = List.map (binary_traverse ~tr:tr) chars in
   List.combine chars bin
