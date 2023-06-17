@@ -21,6 +21,24 @@ let rec tree_insert x tr =
     | _ -> Node (x, left, right)
 
 (*Problem 44*)
+(*Not solved yet*)
+
+(*Problem 45*)
+(*Not solved yet*)
+
+(*Problem 46*)
+(*Not solved yet*)
+
+(*Problem 47*)
+(*Not solved yet*)
+
+(*Problem 48*)
+(*Not solved yet*)
+
+(*Problem 49*)
+(*Not solved yet*)
+
+(*Problem 50*)
 (*Count the Leaves of the Binary Tree*)
 let rec count_leaves tr =
   match tr with
@@ -28,7 +46,7 @@ let rec count_leaves tr =
   | Node (_, Leaf, Leaf) -> 1
   | Node (_, l, r) -> count_leaves l + count_leaves r
 
-(*Problem 45*)
+(*Problem 51*)
 (*Collect the Leaves of a
  Binary Tree in a list*)
 let leaves tr =
@@ -40,7 +58,7 @@ let leaves tr =
   in
   collector tr []
 
-(*Problem 46*)
+(*Problem 52*)
 (*Collect the Internal Nodes of
  a Binary Tree in a list*)
 let internals tr =
@@ -52,7 +70,7 @@ let internals tr =
   in
   List.rev @@ collector tr []
 
-(*Problem 47*)
+(*Problem 53*)
 (*Collect the Nodes at a given level*)
 let at_level tr i =
   let rec collector tr accum k =
@@ -66,7 +84,7 @@ let at_level tr i =
   in
   collector tr [] 1
 
-(*Problem 48*)
+(*Problem 54*)
 (*Construct a complete binary tree*)
 let rec split_at lst n acc =
   match (n , lst) with
