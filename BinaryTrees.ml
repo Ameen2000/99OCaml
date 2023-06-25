@@ -1,7 +1,17 @@
 (*Functions to make tree exercises easier*)
+exception Empty
+
 type 'a tree =
   | Leaf
   | Node of 'a * 'a tree * 'a tree
+
+let number_nodes tr =
+  let rec aux tr accum =
+    match tr with
+    | Leaf -> accum
+    | Node (root, left, right) -> aux left (aux right (accum + 1))
+  in
+  aux tr 0
 
 let singleton x =
   Node (x, Leaf, Leaf)
@@ -22,9 +32,24 @@ let rec tree_insert x tr =
 
 (*Problem 44*)
 (*Not solved yet*)
+let rec left_insert x tr =
+  match tr with
+  | Leaf -> raise Empty
+  | Node (root, Leaf, right) -> Node (root, Node(x, Leaf, Leaf), right)
+  | Node (root, left, right) -> Node (root, left_insert x left, right)
+
+let rec right_insert x tr =
+  match tr with
+  | Leaf -> raise Empty
+  | Node (root, left, Leaf) -> Node (root, left, Node (x, Leaf, Leaf))
+  | Node (root, left, right) -> Node (root, left, right_insert x right)
 
 (*Problem 45*)
 (*Not solved yet*)
+let construct lst =
+  match lst with
+  | [] -> Leaf
+  | _ -> List.fold_right tree_insert (List.rev lst) Leaf
 
 (*Problem 46*)
 (*Not solved yet*)
