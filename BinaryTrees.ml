@@ -45,14 +45,24 @@ let rec right_insert x tr =
   | Node (root, left, right) -> Node (root, left, right_insert x right)
 
 (*Problem 45*)
-(*Not solved yet*)
+let rec is_mirror tr1 tr2 =
+  match tr1, tr2 with
+  | Leaf, Leaf -> true
+  | Node (_, l1, r1), Node (_, l2, r2) ->
+      is_mirror l1 r2 && is_mirror l2 r1
+  | _ -> false
+
+let is_symmetric tr =
+  match tr with
+  | Leaf -> true
+  | Node (_, left, right) ->
+      is_mirror left right
+
+(*Problem 46*)
 let construct lst =
   match lst with
   | [] -> Leaf
   | _ -> List.fold_right tree_insert (List.rev lst) Leaf
-
-(*Problem 46*)
-(*Not solved yet*)
 
 (*Problem 47*)
 (*Not solved yet*)
