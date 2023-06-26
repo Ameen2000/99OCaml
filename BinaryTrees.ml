@@ -31,18 +31,21 @@ let rec tree_insert x tr =
     | _ -> Node (x, left, right)
 
 (*Problem 44*)
-(*Not solved yet*)
-let rec left_insert x tr =
-  match tr with
-  | Leaf -> raise Empty
-  | Node (root, Leaf, right) -> Node (root, Node(x, Leaf, Leaf), right)
-  | Node (root, left, right) -> Node (root, left_insert x left, right)
+let add_trees_with left_trees right_trees all =
+  let add_right_tree all l =
+    List.fold_left (fun a r -> Node ('x', l, r) :: a) all right_trees in
+  List.fold_left add_right_tree all left_trees
 
-let rec right_insert x tr =
-  match tr with
-  | Leaf -> raise Empty
-  | Node (root, left, Leaf) -> Node (root, left, Node (x, Leaf, Leaf))
-  | Node (root, left, right) -> Node (root, left, right_insert x right)
+let rec cbal_tree n = 
+  if n = 0 then [Leaf]
+  else if n mod 2 = 1
+  then
+    let tr = cbal_tree (n / 2) in
+    add_trees_with tr tr []
+  else
+    let tr1 = cbal_tree (n / 2 - 1) in
+    let tr2 = cbal_tree (n / 2) in
+    add_trees_with tr1 tr2 (add_trees_with tr2 tr1 [])
 
 (*Problem 45*)
 let rec is_mirror tr1 tr2 =
@@ -65,7 +68,9 @@ let construct lst =
   | _ -> List.fold_right tree_insert (List.rev lst) Leaf
 
 (*Problem 47*)
-(*Not solved yet*)
+(* Construct all symmetric, completely balanced binary trees*)
+let sym_cbal_trees n =
+  List.filter is_symmetric (cbal_tree n)
 
 (*Problem 48*)
 (*Not solved yet*)
