@@ -74,17 +74,22 @@ let sym_cbal_trees n =
 
 (*Problem 48*)
 let rec hbal_tree n =
-  if n = 0 then [Leaf]
-  else if n = 1 then [Node ('x', Leaf, Leaf)]
-  else
-    let t1 = hbal_tree (n - 1) in
-    let t2 = hbal_tree (n - 2) in
-    add_trees_with t1 t1 @@ 
-    add_trees_with t1 t2 @@ 
-    add_trees_with t2 t1 []
+  match n with
+  | 0 -> [Leaf]
+  | 1 -> [Node ('x', Leaf, Leaf)]
+  | _ ->
+      let t1 = hbal_tree (n - 1) in
+      let t2 = hbal_tree (n - 2) in
+      add_trees_with t1 t1 @@ 
+      add_trees_with t1 t2 @@ 
+      add_trees_with t2 t1 []
 
 (*Problem 49*)
-(*Not solved yet*)
+let rec min_nodes h =
+  match h with
+  | 0 -> 0
+  | 1 -> 1
+  | _ -> min_nodes (h - 1) + min_nodes (h - 2) + 1
 
 (*Problem 50*)
 (*Count the Leaves of the Binary Tree*)
