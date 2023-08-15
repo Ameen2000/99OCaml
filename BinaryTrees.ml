@@ -1,5 +1,4 @@
 (*Functions to make tree exercises easier*)
-exception Empty
 
 type 'a tree =
   | Leaf

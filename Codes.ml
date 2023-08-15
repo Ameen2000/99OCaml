@@ -61,22 +61,22 @@ let gray n =
 (*Huffman Codes*)
   module type HUFFMAN =
     sig
-      type huffman_tree =
+      type t =
         | Leaf of string * int
-        | Node of int * huffman_tree * huffman_tree
-      val tuple_to_leaf : string * int -> huffman_tree
-      val node : huffman_tree -> huffman_tree -> huffman_tree
-      val sort : huffman_tree list -> huffman_tree list
-      val prio : huffman_tree -> int
-      val insert : huffman_tree -> huffman_tree list -> huffman_tree list
-      val huffman_make : (string * int) list -> huffman_tree
+        | Node of int * t * t
+      val tuple_to_leaf : string * int -> t
+      val node : t -> t -> t
+      val sort : t list -> t list
+      val prio : t -> int
+      val insert : t -> t list -> t list
+      val huffman_make : (string * int) list -> t
     end
 
 module Huffman : HUFFMAN =
   struct
-    type huffman_tree =
+    type t =
       | Leaf of string * int
-      | Node of int * huffman_tree * huffman_tree
+      | Node of int * t * t
 
     let tuple_to_leaf (ch1, n1) =
       Leaf (ch1, n1)
@@ -126,7 +126,6 @@ module Huffman : HUFFMAN =
       in
       aux sorted
   end
-
 
 let binary_traverse elem ~tr =
   let open Huffman in
